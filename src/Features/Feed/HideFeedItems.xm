@@ -257,6 +257,7 @@ static NSArray *removeItemsInList(NSArray *list, BOOL isFeed) {
     return %orig;
 }
 %end
+
 // Hide "suggested for you" text at end of feed
 %hook IGEndOfFeedDemarcatorCellTopOfFeed
 - (void)configureWithViewConfig:(id)arg1 {

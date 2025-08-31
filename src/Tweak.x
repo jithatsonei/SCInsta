@@ -17,7 +17,7 @@
 ///////////////////////////////////////////////////////////
 
 // * Tweak version *
-NSString *SCIVersionString = @"v0.8.0";
+NSString *SCIVersionString = @"v0.7.1";
 
 // Variables that work across features
 BOOL seenButtonEnabled = false;
@@ -41,7 +41,8 @@ BOOL dmVisualMsgsViewedButtonEnabled = false;
         @"dw_story": @(YES),
         @"save_profile": @(YES),
         @"dw_finger_count": @(3),
-        @"dw_finger_duration": @(0.5)
+        @"dw_finger_duration": @(0.5),
+        @"flex_app_start": @(YES)
     };
     [[NSUserDefaults standardUserDefaults] registerDefaults:sciDefaults];
 
@@ -67,6 +68,10 @@ BOOL dmVisualMsgsViewedButtonEnabled = false;
 
     [self authPrompt];
 
+    if ([SCIManager getBoolPref:@"flex_app_start"]) {
+        [[objc_getClass("FLEXManager") sharedManager] showExplorer];
+    }
+
     return true;
 }
 
@@ -82,11 +87,6 @@ BOOL isAuthenticationBeingShown = NO;
     %orig;
 
     [self authPrompt];
-}
-- (void)applicationDidBecomeActive:(id)arg1 {
-    if ([SCIManager getBoolPref:@"flex_app_start"]) {
-        [[objc_getClass("FLEXManager") sharedManager] showExplorer];
-    }
 }
 
 %new - (void)authPrompt {

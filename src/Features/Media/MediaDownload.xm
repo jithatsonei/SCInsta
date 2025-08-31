@@ -65,8 +65,9 @@ static void initDownloaders () {
     // Download image & show in share menu
     initDownloaders();
     [imageDownloadDelegate downloadFileWithURL:photoUrl
-                                 fileExtension:[[photoUrl lastPathComponent]pathExtension]
-                                      hudLabel:nil];
+                                     fileExtension:[[photoUrl lastPathComponent]pathExtension]
+                                          hudLabel:nil
+                                      ];
 }
 %end
 
@@ -146,8 +147,9 @@ static void initDownloaders () {
     // Download image & show in share menu
     initDownloaders();
     [imageDownloadDelegate downloadFileWithURL:photoUrl
-                                 fileExtension:[[photoUrl lastPathComponent]pathExtension]
-                                      hudLabel:nil];
+                                     fileExtension:[[photoUrl lastPathComponent]pathExtension]
+                                          hudLabel:nil
+                                      ];
 }
 %end
 
@@ -184,8 +186,8 @@ static void initDownloaders () {
     // Download video & show in share menu
     initDownloaders();
     [videoDownloadDelegate downloadFileWithURL:videoUrl
-                                 fileExtension:[[videoUrl lastPathComponent] pathExtension]
-                                      hudLabel:nil];
+                                     fileExtension:[[videoUrl lastPathComponent] pathExtension]
+                                          hudLabel:nil];
 }
 %end
 
@@ -225,8 +227,9 @@ static void initDownloaders () {
     // Download image & show in share menu
     initDownloaders();
     [imageDownloadDelegate downloadFileWithURL:photoUrl
-                                 fileExtension:[[photoUrl lastPathComponent]pathExtension]
-                                      hudLabel:nil];
+                                     fileExtension:[[photoUrl lastPathComponent]pathExtension]
+                                          hudLabel:nil
+                                      ];
 }
 %end
 
@@ -285,8 +288,8 @@ static void initDownloaders () {
     // Download video & show in share menu
     initDownloaders();
     [videoDownloadDelegate downloadFileWithURL:videoUrl
-                                 fileExtension:[[videoUrl lastPathComponent] pathExtension]
-                                      hudLabel:nil];
+                                     fileExtension:[[videoUrl lastPathComponent] pathExtension]
+                                          hudLabel:nil];
 }
 %end
 
@@ -321,7 +324,7 @@ static void initDownloaders () {
     // Download image & preview in quick look
     initDownloaders();
     [imageDownloadDelegate downloadFileWithURL:imageUrl
-                                 fileExtension:[[imageUrl lastPathComponent] pathExtension]
-                                      hudLabel:@"Loading"];
+                            fileExtension:[[imageUrl lastPathComponent] pathExtension]
+                                 hudLabel:@"Loading"];
 }
 %end

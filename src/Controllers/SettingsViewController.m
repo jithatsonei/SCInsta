@@ -96,7 +96,6 @@
             [self newSwitchCellWithTitle:@"Hide Meta AI" detailTitle:@"Hides the meta ai buttons/functionality within the app" key:@"hide_meta_ai" changeAction:nil],
             [self newSwitchCellWithTitle:@"Copy description" detailTitle:@"Copy the text descriptions by long pressing" key:@"copy_description" changeAction:nil],
             [self newSwitchCellWithTitle:@"Use detailed color picker" detailTitle:@"Long press on the eyedropper tool in stories to customize the text color more precisely" key:@"detailed_color_picker" changeAction:nil],
-            [self newSwitchCellWithTitle:@"Enable hidden text effects/styles" detailTitle:@"Unlocks the use of every effect/style for text in stories" key:@"enable_hidden_texteffectsstyles" changeAction:nil],
             [self newSwitchCellWithTitle:@"Do not save recent searches" detailTitle:@"Search bars will no longer save your recent searches" key:@"no_recent_searches" changeAction:nil],
             [self newSwitchCellWithTitle:@"Hide notes tray" detailTitle:@"Hides the notes tray in the dm inbox" key:@"hide_notes_tray" changeAction:nil],
             [self newSwitchCellWithTitle:@"Hide friends map" detailTitle:@"Hides the friends map icon in the notes tray" key:@"hide_friends_map" changeAction:nil],
@@ -146,7 +145,7 @@
             [self newSwitchCellWithTitle:@"Hide explore posts grid" detailTitle:@"Hides the grid of suggested posts on the explore/search tab" key:@"hide_explore_grid" changeAction:nil],
             [self newSwitchCellWithTitle:@"Hide trending searches" detailTitle:@"Hides the trending searches under the explore search bar" key:@"hide_trending_searches" changeAction:nil],
             [self newSwitchCellWithTitle:@"No suggested chats" detailTitle:@"Hides the suggested broadcast channels in direct messages" key:@"no_suggested_chats" changeAction:nil],
-            [self newSwitchCellWithTitle:@"No suggested users" detailTitle:@"Hides all suggested users for you to follow, outside your feed" key:@"no_suggested_users" changeAction:nil],
+            [self newSwitchCellWithTitle:@"No suggested users" detailTitle:@"Hides the suggested users for you to follow" key:@"no_suggested_users" changeAction:nil],
             [self newSwitchCellWithTitle:@"Disable scrolling reels" detailTitle:@"Prevents reels from being scrolled to the next video" key:@"disable_scrolling_reels" changeAction:nil],
 
             // Section 7: Hide navigation tabs
@@ -162,7 +161,7 @@
             // Section 9: Debugging
             [self newSectionWithTitle:@"Debugging" footer:nil],
             [self newSwitchCellWithTitle:@"Enable FLEX gesture" detailTitle:@"Allows you to hold 5 fingers on the screen to open the FLEX explorer" key:@"flex_instagram" changeAction:@selector(FLEXAction:)],
-            [self newSwitchCellWithTitle:@"Open FLEX on app focus" detailTitle:@"Automatically opens the FLEX explorer when the app is focused" key:@"flex_app_start" changeAction:nil],
+            [self newSwitchCellWithTitle:@"Open FLEX on app start" detailTitle:@"Automatically opens the FLEX explorer when the app launches" key:@"flex_app_start" changeAction:nil],
             [self newSwitchCellWithTitle:@"Disable safe mode" detailTitle:@"Makes Instagram not reset settings after subsequent crashes" key:@"disable_safe_mode" changeAction:nil],
 
             // Section 10: Credits

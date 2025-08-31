@@ -1,6 +1,6 @@
 # SCInsta
 A feature-rich tweak for Instagram on iOS!\
-`Version v0.8.0` | `Tested on Instagram 384.0.0`
+`Version v0.7.1` | `Tested on Instagram 384.0.0`
 
 ---
 
@@ -25,33 +25,23 @@ A feature-rich tweak for Instagram on iOS!\
 - Hide Meta AI
 - Copy description
 - Use detailed color picker
-- Enable hidden text effects/styles
+- Disable scrolling reels
 - Do not save recent searches
-- Hide notes tray
+- Hide explore posts grid
+- Hide trending searches
 - Hide friends map
+- No suggested chats (in dms)
+- No suggested users
+- Hide notes tray
 
 ### Feed
 - Hide ads
-- Hide stories tray
 - Hide entire feed
+- Hide stories tray
 - No suggested posts
 - No suggested for you (accounts)
 - No suggested reels
 - No suggested threads posts
-
-### Save media
-- Download feed posts
-- Download reels
-- Download stories
-- Save profile picture
-
-### Story and messages
-- Keep deleted message
-- Disable screenshot detection
-- Unlimited replay of direct stories
-- Disabling sending read receipts
-- Disable story seen receipt
-- Disable view-once limitations
 
 ### Confirm actions
 - Confirm like: Posts (and stories)
@@ -62,19 +52,24 @@ A feature-rich tweak for Instagram on iOS!\
 - Confirm shh mode (disappearing messages)
 - Confirm sticker interaction
 - Confirm posting comment
-- Confirm changing direct message theme
+- Confirm changing theme
 
-### Focus/Distractions
-- Hide explore posts grid
-- Hide trending searches
-- No suggested chats
-- No suggested users
-- Disable scrolling reels
-
-### Navigation
+### Hide navigation tabs
 - Hide explore tab
 - Hide create tab
 - Hide reels tab
+
+### Save media (partially broken)
+- Download images/videos
+- Save profile image
+
+### Story and messages
+- Keep deleted message
+- Unlimited replay of direct stories (no video support currently)
+- Disabling sending read receipts
+- Remove screenshot alert
+- Disable story seen receipt
+- Disable view-once limitations
 
 ### Security
 - Padlock (require biometric authentication to open the app)
