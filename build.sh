@@ -34,18 +34,18 @@ then
         FLEXPATH='packages/FLEXing.dylib packages/libflex.dylib'
         COMPRESSION=0
 
-        make "DEV=1"
+        make
     else
         FLEXPATH='.theos/obj/debug/FLEXing.dylib .theos/obj/debug/libflex.dylib'
         COMPRESSION=9
 
-        make "SIDELOAD=1"
+        make
     fi
 
     # Create IPA File
     echo -e '\033[1m\033[32mCreating the IPA file...\033[0m'
     rm -f packages/SCInsta-sideloaded.ipa
-    cyan -i "packages/${ipaFile}" -o packages/SCInsta-sideloaded.ipa -f .theos/obj/debug/SCInsta.dylib .theos/obj/debug/sideloadfix.dylib $FLEXPATH -c $COMPRESSION -m 15.0 -du
+    cyan -i "packages/${ipaFile}" -o packages/SCInsta-sideloaded.ipa -f .theos/obj/debug/SCInsta.dylib $FLEXPATH -c $COMPRESSION -m 15.0 -du
     
     echo -e "\033[1m\033[32mDone, we hope you enjoy SCInsta!\033[0m\n\nYou can find the ipa file at: $(pwd)/packages"
 
