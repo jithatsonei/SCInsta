@@ -97,10 +97,12 @@ jobs:
                 pip install --force-reinstall https://github.com/asdfzxcvbn/pyzule-rw/archive/main.zip
                 
                 cd main
+                curl -Lo patchipa https://github.com/asdfzxcvbn/ipapatch/releases/download/v2.1.2/ipapatch.macos-amd64
+                chmod +x patchipa
                 ls -la
 
                 ./build.sh sideload
-
+                ./patchipa --input "packages/SCInsta_sideloaded_v${SCINSTA_VERSION}.ipa" --inplace --noconfirm
                 ls -la packages
                 
               env:
