@@ -49,4 +49,5 @@ packages
 
 .pyzule*
 .cyan*
+.ipapatch*
 dumps
