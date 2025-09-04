@@ -15,6 +15,35 @@ fi
 if [ "$1" == "sideload" ];
 then
 
+    # Check if building with dev mode
+    if [ "$2" == "--dev" ];
+    then
+        # Cache pre-built FLEX libs
+        mkdir -p "packages/cache"
+        cp -f ".theos/obj/debug/FLEXing.dylib" "packages/cache/FLEXing.dylib" 2>/dev/null || true
+        cp -f ".theos/obj/debug/libflex.dylib" "packages/cache/libflex.dylib" 2>/dev/null || true
+
+        if [[ ! -f "packages/cache/FLEXing.dylib" || ! -f "packages/cache/libflex.dylib" ]]; then
+            echo -e '\033[1m\033[0;33mCould not find cached pre-built FLEX libs, building prerequisite binaries\033[0m'
+            echo
+
+            ./build.sh sideload --buildonly
+            ./build-dev.sh
+            exit
+        fi
+
+        MAKEARGS='DEV=1'
+        FLEXPATH='packages/cache/FLEXing.dylib packages/cache/libflex.dylib'
+        COMPRESSION=0
+    else
+        # Clear cached FLEX libs
+        rm -rf "packages/cache"
+
+        MAKEARGS='SIDELOAD=1'
+        FLEXPATH='.theos/obj/debug/FLEXing.dylib .theos/obj/debug/libflex.dylib'
+        COMPRESSION=9
+    fi
+
     # Clean build artifacts
     make clean
     rm -rf .theos
@@ -28,24 +57,17 @@ then
 
     echo -e '\033[1m\033[32mBuilding SCInsta tweak for sideloading (as IPA)\033[0m'
 
-    # Check if building with dev mode
-    if [ "$2" == "--dev" ];
+    make $MAKEARGS
+
+    if [ "$2" == "--buildonly" ];
     then
-        FLEXPATH='packages/FLEXing.dylib packages/libflex.dylib'
-        COMPRESSION=0
-
-        make
-    else
-        FLEXPATH='.theos/obj/debug/FLEXing.dylib .theos/obj/debug/libflex.dylib'
-        COMPRESSION=9
-
-        make
+        exit
     fi
 
     # Create IPA File
     echo -e '\033[1m\033[32mCreating the IPA file...\033[0m'
     rm -f packages/SCInsta-sideloaded.ipa
-    cyan -i "packages/${ipaFile}" -o packages/SCInsta-sideloaded.ipa -f .theos/obj/debug/SCInsta.dylib $FLEXPATH -c $COMPRESSION -m 15.0 -du
+    cyan -i "packages/${ipaFile}" -o packages/SCInsta-sideloaded.ipa -f .theos/obj/debug/SCInsta.dylib .theos/obj/debug/sideloadfix.dylib $FLEXPATH -c $COMPRESSION -m 15.0 -du
     
     echo -e "\033[1m\033[32mDone, we hope you enjoy SCInsta!\033[0m\n\nYou can find the ipa file at: $(pwd)/packages"
 
