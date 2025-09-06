@@ -17,6 +17,9 @@ then
     ./sign.sh SCInsta
     ./deploy.sh SCInsta true
 else
+    # Kill LiveContainer process on iPhone
+    pymobiledevice3 developer dvt pkill "LiveContainer" --tunnel ""
+
     # Built tweak and deploy to live container
     make clean
     make DEV=1
@@ -29,4 +32,8 @@ else
 
     # Copy to livecontainer tweaks folder
     cp -fr .theos/obj/debug/SCInsta.dylib livecontainer/Documents/Tweaks/SCInsta/SCInsta.dylib
+
+    # Launch SCInsta on iPhone
+    sleep 1
+    pymobiledevice3 developer dvt launch --kill-existing --tunnel "" com.socuul.scinsta-devlauncher
 fi
