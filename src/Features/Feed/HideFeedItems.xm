@@ -116,7 +116,11 @@ static NSArray *removeItemsInList(NSArray *list, BOOL isFeed) {
 
         // Remove ads
         if ([SCIManager getBoolPref:@"hide_ads"]) {
-            if (([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp])) || [obj isKindOfClass:%c(IGAdItem)]) {
+            if (
+                ([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp]))
+                || ([obj isKindOfClass:%c(IGDiscoveryGridItem)] && [[obj model] isKindOfClass:%c(IGAdItem)])
+                || [obj isKindOfClass:%c(IGAdItem)]
+            ) {
                 NSLog(@"[SCInsta] Removing ads");
 
                 shouldHide = YES;
@@ -257,6 +261,17 @@ static NSArray *removeItemsInList(NSArray *list, BOOL isFeed) {
     return %orig;
 }
 %end
+// "Sponsored" posts on discover/search page
+%hook IGExploreListKitDataSource
+- (NSArray *)objectsForListAdapter:(id)arg1 {
+    if ([SCIManager getBoolPref:@"hide_ads"]) {
+        return removeItemsInList(%orig, NO);
+    }
+
+    return %orig;
+}
+%end
+
 // Hide "suggested for you" text at end of feed
 %hook IGEndOfFeedDemarcatorCellTopOfFeed
 - (void)configureWithViewConfig:(id)arg1 {
