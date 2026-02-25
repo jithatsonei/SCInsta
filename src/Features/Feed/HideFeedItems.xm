@@ -1,108 +1,86 @@
 #import "../../Utils.h"
 #import "../../InstagramHeaders.h"
 
-static NSArray *removeItemsInList(NSArray *list, BOOL isFeed) {
-    NSArray *originalObjs = list;
-    NSMutableArray *filteredObjs = [NSMutableArray arrayWithCapacity:[originalObjs count]];
+static inline BOOL SCIResponds(id obj, SEL sel) {
+    return obj && [obj respondsToSelector:sel];
+}
 
-    for (id obj in originalObjs) {
-        // Remove suggested posts
+static inline id SCISendId(id obj, SEL sel) {
+    if (!SCIResponds(obj, sel)) return nil;
+    return ((id (*)(id, SEL))objc_msgSend)(obj, sel);
+}
+
+static inline BOOL SCISendBool(id obj, SEL sel) {
+    if (!SCIResponds(obj, sel)) return NO;
+    return ((BOOL (*)(id, SEL))objc_msgSend)(obj, sel);
+}
+
+
+
+static NSArray *removeItemsInList(NSArray *list, BOOL isFeed) {
+    if (![list isKindOfClass:[NSArray class]]) return list;   // extra guard
+
+    NSMutableArray *filteredObjs = [NSMutableArray arrayWithCapacity:list.count];
+
+    for (id obj in list) {
+
         if (isFeed && [SCIUtils getBoolPref:@"no_suggested_post"]) {
 
             // Posts
-            if (
-                ([obj isKindOfClass:%c(IGMedia)] && !((IGMedia *)obj).isOrganicMedia)
-                || ([obj isKindOfClass:%c(IGFeedGroupHeaderViewModel)] && [[obj title] isEqualToString:@"Suggested Posts"])
-            ) {
-                NSLog(@"[SCInsta] Removing suggested posts");
-
-                continue;
-            }
-
-            // Suggested stories (carousel)
-            if ([obj isKindOfClass:%c(IGInFeedStoriesTrayModel)]) {
-                NSLog(@"[SCInsta] Hiding suggested stories carousel");
-
-                continue;
-            }
-
-        }
-
-        // Remove suggested reels (carousel)
-        if (isFeed && [SCIUtils getBoolPref:@"no_suggested_reels"]) {
-            if ([obj isKindOfClass:%c(IGFeedScrollableClipsModel)]) {
-                NSLog(@"[SCInsta] Hiding suggested reels carousel");
-
-                continue;
-            }
-        }
-        
-        // Remove suggested for you (accounts)
-        if ([SCIUtils getBoolPref:@"no_suggested_account"]) {
-            
-            // Feed
-            if (isFeed && [obj isKindOfClass:%c(IGHScrollAYMFModel)]) {
-                NSLog(@"[SCInsta] Hiding accounts suggested for you (feed)");
-
-                continue;
-            }
-
-            // Reels
-            if ([obj isKindOfClass:%c(IGSuggestedUserInReelsModel)]) {
-                NSLog(@"[SCInsta] Hiding accounts suggested for you (reels)");
-
-                continue;
-            }
-        }
-
-        // Remove suggested threads posts
-        if ([SCIUtils getBoolPref:@"no_suggested_threads"]) {
-
-            // Feed (carousel)
-            if (isFeed) {
-                if ([obj isKindOfClass:%c(IGBloksFeedUnitModel)] || [obj isKindOfClass:objc_getClass("IGThreadsInFeedModels.IGThreadsInFeedModel")]) {
-                    NSLog(@"[SCInsta] Hiding suggested threads posts (carousel)");
-
+            if ([obj isKindOfClass:%c(IGMedia)]) {
+                // isOrganicMedia
+                BOOL organic = SCISendBool(obj, @selector(isOrganicMedia));
+                if (!organic) {
+                    NSLog(@"[SCInsta] Removing suggested posts");
                     continue;
                 }
             }
 
-            // Reels
-            if ([obj isKindOfClass:%c(IGSundialNetegoItem)]) {
-                NSLog(@"[SCInsta] Hiding suggested threads posts (reels)");
-
-                continue;
+            // Header title
+            if ([obj isKindOfClass:%c(IGFeedGroupHeaderViewModel)]) {
+                NSString *title = SCISendId(obj, @selector(title));
+                if ([title isKindOfClass:[NSString class]] && [title isEqualToString:@"Suggested Posts"]) {
+                    NSLog(@"[SCInsta] Removing suggested posts");
+                    continue;
+                }
             }
 
-        }        
-
-        // Remove story tray
-        if (isFeed && [SCIUtils getBoolPref:@"hide_stories_tray"]) {
-            if ([obj isKindOfClass:%c(IGStoryDataController)]) {
-                NSLog(@"[SCInsta] Hiding stories tray");
-
+            if ([obj isKindOfClass:%c(IGInFeedStoriesTrayModel)]) {
+                NSLog(@"[SCInsta] Hiding suggested stories carousel");
                 continue;
             }
         }
 
-        // Hide entire feed
-        if (isFeed && [SCIUtils getBoolPref:@"hide_entire_feed"]) {
-            if ([obj isKindOfClass:%c(IGPostCreationManager)] || [obj isKindOfClass:%c(IGMedia)] || [obj isKindOfClass:%c(IGEndOfFeedDemarcatorModel)] || [obj isKindOfClass:%c(IGSpinnerLabelViewModel)]) {
-                NSLog(@"[SCInsta] Hiding entire feed");
-
+        if (isFeed && [SCIUtils getBoolPref:@"no_suggested_reels"]) {
+            if ([obj isKindOfClass:%c(IGFeedScrollableClipsModel)]) {
+                NSLog(@"[SCInsta] Hiding suggested reels carousel");
                 continue;
             }
         }
 
-        // Remove ads
         if ([SCIUtils getBoolPref:@"hide_ads"]) {
-            if (
-                ([obj isKindOfClass:%c(IGFeedItem)] && ([obj isSponsored] || [obj isSponsoredApp]))
-                || ([obj isKindOfClass:%c(IGDiscoveryGridItem)] && [[obj model] isKindOfClass:%c(IGAdItem)])
-                || [obj isKindOfClass:%c(IGAdItem)]
-            ) {
-                NSLog(@"[SCInsta] Removing ads");
 
+            // IGFeedItem sponsor flags
+            if ([obj isKindOfClass:%c(IGFeedItem)]) {
+                BOOL sponsored = SCISendBool(obj, @selector(isSponsored));
+                BOOL sponsoredApp = SCISendBool(obj, @selector(isSponsoredApp));
+                if (sponsored || sponsoredApp) {
+                    NSLog(@"[SCInsta] Removing ads");
+                    continue;
+                }
+            }
+
+            // Discovery grid model
+            if ([obj isKindOfClass:%c(IGDiscoveryGridItem)]) {
+                id model = SCISendId(obj, @selector(model));
+                if (model && [model isKindOfClass:%c(IGAdItem)]) {
+                    NSLog(@"[SCInsta] Removing ads");
+                    continue;
+                }
+            }
+
+            if ([obj isKindOfClass:%c(IGAdItem)]) {
+                NSLog(@"[SCInsta] Removing ads");
                 continue;
             }
         }
